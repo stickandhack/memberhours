@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S&H — Corporate Members</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #181818;
+    --surface2: #222222;
+    --border: #2a2a2a;
+    --border2: #333;
+    --text: #f0f0f0;
+    --text2: #888;
+    --text3: #555;
+    --green: #b8f7a0;
+    --green-dim: #2a3d22;
+    --amber: #f5d97a;
+    --amber-dim: #3a3010;
+    --red: #ff7070;
+    --red-dim: #3a1a1a;
+    --accent: #e8e8e8;
+    --starter: #7ab8f5;
+    --starter-dim: #1a2a3a;
+    --pro: #b8f7a0;
+    --pro-dim: #1e3318;
+    --elite: #d4a8f7;
+    --elite-dim: #2a1a3a;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  /* Layout */
+  .app { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* Header */
+  .top-bar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text2);
+  }
+  .logo span { color: var(--text); }
+  .top-right { display: flex; align-items: center; gap: 12px; }
+  .period {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+  }
+  .btn-add {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 4px;
+    border: 0.5px solid var(--border2);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn-add:hover { background: var(--surface2); border-color: #555; }
+
+  /* Summary row */
+  .summary-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 18px;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+  .stat-val { font-size: 28px; font-weight: 300; color: var(--text); line-height: 1; }
+  .stat-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  /* Member cards */
+  .member-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .member-card:hover { border-color: var(--border2); }
+  .member-card.at-risk { border-color: #3a2800; }
+  .member-card.exhausted { border-color: #3a1a1a; }
+
+  .card-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 18px 22px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .card-head:hover { background: var(--surface2); }
+
+  .head-left { display: flex; align-items: center; gap: 14px; }
+  .tier-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .tier-dot.starter { background: var(--starter); }
+  .tier-dot.pro { background: var(--pro); }
+  .tier-dot.elite { background: var(--elite); }
+
+  .member-name { font-weight: 500; font-size: 14px; color: var(--text); }
+  .member-sub {
+    font-size: 12px; color: var(--text2); margin-top: 1px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tier-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+  .tier-label.starter { background: var(--starter-dim); color: var(--starter); }
+  .tier-label.pro { background: var(--pro-dim); color: var(--pro); }
+  .tier-label.elite { background: var(--elite-dim); color: var(--elite); }
+
+  .head-right { display: flex; align-items: center; gap: 20px; }
+
+  .hours-display { text-align: right; }
+  .hours-big { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 400; color: var(--text); }
+  .hours-big.warn { color: var(--amber); }
+  .hours-big.danger { color: var(--red); }
+  .hours-caption { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+  .bar-wrap { width: 100px; }
+  .bar-track {
+    height: 3px; background: var(--surface2); border-radius: 99px;
+    overflow: hidden; margin-bottom: 5px;
+  }
+  .bar-fill { height: 100%; border-radius: 99px; transition: width 0.4s; }
+  .bar-fill.ok { background: var(--green); }
+  .bar-fill.warn { background: var(--amber); }
+  .bar-fill.danger { background: var(--red); }
+  .bar-pct { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3); text-align: right; }
+
+  .chevron {
+    font-size: 10px; color: var(--text3);
+    transition: transform 0.2s;
+    font-family: 'DM Mono', monospace;
+  }
+  .chevron.open { transform: rotate(180deg); }
+
+  /* Detail panel */
+  .card-body { display: none; border-top: 0.5px solid var(--border); }
+  .card-body.open { display: block; }
+
+  .body-inner { padding: 20px 22px; }
+
+  .mini-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .mini-stat {
+    background: var(--surface2);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .mini-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+  .mini-val { font-size: 22px; font-weight: 300; color: var(--text); }
+  .mini-val.warn { color: var(--amber); }
+  .mini-val.danger { color: var(--red); }
+
+  /* Bookings */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 10px;
+  }
+
+  .booking-list { margin-bottom: 16px; }
+  .booking-row {
+    display: grid;
+    grid-template-columns: 1fr 90px 50px 28px;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+    border-top: 0.5px solid var(--border);
+    font-size: 13px;
+  }
+  .booking-note { color: var(--text2); }
+  .booking-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); }
+  .booking-hrs { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text); text-align: right; }
+  .del-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text3); font-size: 12px; padding: 2px 4px;
+    border-radius: 3px; transition: color 0.15s, background 0.15s;
+    text-align: center;
+  }
+  .del-btn:hover { color: var(--red); background: var(--red-dim); }
+
+  .empty-note {
+    font-size: 12px; color: var(--text3);
+    padding: 10px 0 6px;
+    border-top: 0.5px solid var(--border);
+  }
+
+  /* Add booking form */
+  .add-section { margin-top: 4px; }
+  .add-form {
+    display: grid;
+    grid-template-columns: 120px 70px 1fr auto;
+    gap: 8px;
+    align-items: center;
+    padding: 12px 0 0;
+    border-top: 0.5px solid var(--border);
+  }
+  .add-form input {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 6px 10px;
+    background: var(--bg);
+    border: 0.5px solid var(--border2);
+    border-radius: 4px;
+    color: var(--text);
+    width: 100%;
+  }
+  .add-form input:focus { outline: none; border-color: #555; }
+  .add-form input::placeholder { color: var(--text3); }
+  .btn-log {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 0.5px solid var(--border2);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .btn-log:hover { background: var(--surface2); }
+
+  /* Actions row */
+  .actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 16px;
+    margin-top: 16px;
+    border-top: 0.5px solid var(--border);
+  }
+  .btn-ghost {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 0.5px solid var(--border);
+    background: transparent;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--border2); }
+  .btn-ghost.destructive:hover { color: var(--red); border-color: var(--red-dim); }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 0.5px solid var(--border2);
+    border-radius: 8px;
+    padding: 28px;
+    width: 360px;
+    max-width: calc(100vw - 32px);
+  }
+  .modal-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .field { margin-bottom: 14px; }
+  .field label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    display: block;
+    margin-bottom: 5px;
+  }
+  .field input, .field select {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 12px;
+    background: var(--bg);
+    border: 0.5px solid var(--border2);
+    border-radius: 4px;
+    color: var(--text);
+  }
+  .field input:focus, .field select:focus { outline: none; border-color: #555; }
+  .field select option { background: var(--surface); }
+  .modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+  .btn-cancel {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 18px;
+    border-radius: 4px;
+    border: 0.5px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+  }
+  .btn-confirm {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 4px;
+    border: none;
+    background: var(--text);
+    color: var(--bg);
+    cursor: pointer;
+  }
+  .btn-confirm:hover { opacity: 0.88; }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--text3);
+  }
+  .empty-state p { font-size: 13px; margin-bottom: 16px; }
+
+  @media (max-width: 600px) {
+    .summary-row { grid-template-columns: 1fr 1fr; }
+    .summary-row .stat:last-child { grid-column: 1/-1; }
+    .bar-wrap { display: none; }
+    .add-form { grid-template-columns: 1fr 1fr; }
+    .add-form input:last-of-type { grid-column: 1/-1; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top-bar">
+    <div class="logo"><span>S&H</span> / Corporate Members</div>
+    <div class="top-right">
+      <span class="period" id="period-label"></span>
+      <button class="btn-add" onclick="openModal()">+ Add member</button>
+    </div>
+  </div>
+
+  <div class="summary-row" id="summary-row">
+    <div class="stat">
+      <div class="stat-label">Members</div>
+      <div class="stat-val" id="s-members">0</div>
+      <div class="stat-sub">active accounts</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Hours used</div>
+      <div class="stat-val" id="s-used">0</div>
+      <div class="stat-sub">across all members</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">At / near limit</div>
+      <div class="stat-val" id="s-atrisks">0</div>
+      <div class="stat-sub">80%+ used</div>
+    </div>
+  </div>
+
+  <div id="member-list"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">Add corporate member</div>
+    <div class="field"><label>Company name</label><input id="f-name" placeholder="e.g. Acme Corp" /></div>
+    <div class="field"><label>Contact name</label><input id="f-contact" placeholder="e.g. Jane Smith" /></div>
+    <div class="field"><label>Tier</label>
+      <select id="f-tier">
+        <option value="starter">Starter — 72 hrs / year</option>
+        <option value="pro" selected>Pro — 144 hrs / year</option>
+        <option value="elite">Elite — 288 hrs / year</option>
+      </select>
+    </div>
+    <div class="field"><label>Start date</label><input type="date" id="f-start" /></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-confirm" onclick="confirmAdd()">Add member</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TIER = { starter: 72, pro: 144, elite: 288 };
+const TIER_NAME = { starter: 'Starter', pro: 'Pro', elite: 'Elite' };
+const KEY = 'sh_corp_v3';
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; }
+}
+function save(d) {
+  try { localStorage.setItem(KEY, JSON.stringify(d)); } catch {}
+}
+
+let members = load();
+let open = new Set();
+
+// Seed demo data on first load
+if (!members.length) {
+  members = [
+    { id: 1, name: 'Example Corp', contact: 'John Smith', tier: 'pro', start: '2025-01-01', bookings: [
+      { id: 'b1', date: '2025-02-14', hours: 4, note: 'Team outing' },
+      { id: 'b2', date: '2025-03-08', hours: 3, note: 'Client event' }
+    ]}
+  ];
+  save(members);
+}
+
+function used(m) { return m.bookings.reduce((s,b) => s + b.hours, 0); }
+function allowed(m) { return TIER[m.tier]; }
+function pct(m) { return Math.min(used(m) / allowed(m), 1); }
+function statusClass(m) {
+  const p = pct(m);
+  if (p >= 1) return 'danger';
+  if (p >= 0.8) return 'warn';
+  return 'ok';
+}
+
+function renderSummary() {
+  document.getElementById('s-members').textContent = members.length;
+  const totalUsed = members.reduce((s,m) => s + used(m), 0);
+  document.getElementById('s-used').textContent = totalUsed;
+  const atRisk = members.filter(m => pct(m) >= 0.8).length;
+  document.getElementById('s-atrisks').textContent = atRisk;
+}
+
+function setPeriod() {
+  const now = new Date();
+  document.getElementById('period-label').textContent =
+    now.toLocaleString('default', { month: 'long', year: 'numeric' });
+}
+
+function render() {
+  renderSummary();
+  const list = document.getElementById('member-list');
+  if (!members.length) {
+    list.innerHTML = '<div class="empty-state"><p>No members yet.</p></div>';
+    return;
+  }
+  list.innerHTML = '';
+  members.forEach(m => {
+    const u = used(m), a = allowed(m), r = a - u;
+    const p = pct(m), sc = statusClass(m);
+    const isOpen = open.has(m.id);
+    const cardClass = sc === 'danger' ? 'exhausted' : sc === 'warn' ? 'at-risk' : '';
+
+    const bookingRows = m.bookings.length
+      ? m.bookings.map(b => `
+        <div class="booking-row">
+          <span class="booking-note">${b.note || '—'}</span>
+          <span class="booking-date">${b.date}</span>
+          <span class="booking-hrs">${b.hours}h</span>
+          <button class="del-btn" onclick="delBooking(${m.id},'${b.id}',event)">✕</button>
+        </div>`).join('')
+      : '<div class="empty-note">No bookings logged yet.</div>';
+
+    const card = document.createElement('div');
+    card.className = `member-card ${cardClass}`;
+    card.innerHTML = `
+      <div class="card-head" onclick="toggleCard(${m.id})">
+        <div class="head-left">
+          <div class="tier-dot ${m.tier}"></div>
+          <div>
+            <div class="member-name">${m.name}</div>
+            <div class="member-sub">
+              ${m.contact}
+              <span class="tier-label ${m.tier}">${TIER_NAME[m.tier]}</span>
+            </div>
+          </div>
+        </div>
+        <div class="head-right">
+          <div class="bar-wrap">
+            <div class="bar-track"><div class="bar-fill ${sc}" style="width:${Math.round(p*100)}%"></div></div>
+            <div class="bar-pct">${Math.round(p*100)}% used</div>
+          </div>
+          <div class="hours-display">
+            <div class="hours-big ${sc}">${r}</div>
+            <div class="hours-caption">${u} / ${a} hrs used</div>
+          </div>
+          <div class="chevron ${isOpen ? 'open' : ''}">▾</div>
+        </div>
+      </div>
+      <div class="card-body ${isOpen ? 'open' : ''}">
+        <div class="body-inner">
+          <div class="mini-stats">
+            <div class="mini-stat"><div class="mini-label">Used</div><div class="mini-val">${u}</div></div>
+            <div class="mini-stat"><div class="mini-label">Remaining</div><div class="mini-val ${sc}">${r}</div></div>
+            <div class="mini-stat"><div class="mini-label">Allowance</div><div class="mini-val">${a}</div></div>
+          </div>
+          <div class="section-label">Bookings</div>
+          <div class="booking-list">${bookingRows}</div>
+          <div class="add-section">
+            <div class="section-label">Log booking</div>
+            <div class="add-form">
+              <input type="date" id="d-${m.id}" />
+              <input type="number" min="0.5" step="0.5" placeholder="hrs" id="h-${m.id}" />
+              <input type="text" placeholder="note (optional)" id="n-${m.id}" />
+              <button class="btn-log" onclick="addBooking(${m.id})">+ Log</button>
+            </div>
+          </div>
+          <div class="actions-row">
+            <button class="btn-ghost" onclick="resetMember(${m.id})">Reset hours</button>
+            <button class="btn-ghost destructive" onclick="removeMember(${m.id})">Remove member</button>
+          </div>
+        </div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function toggleCard(id) {
+  open.has(id) ? open.delete(id) : open.add(id);
+  render();
+}
+
+function addBooking(id) {
+  const date = document.getElementById(`d-${id}`).value;
+  const hrs = parseFloat(document.getElementById(`h-${id}`).value);
+  const note = document.getElementById(`n-${id}`).value.trim();
+  if (!date || !hrs || hrs <= 0) { alert('Enter a date and valid hours.'); return; }
+  const m = members.find(x => x.id === id);
+  m.bookings.push({ id: 'b' + Date.now(), date, hours: hrs, note });
+  save(members);
+  render();
+}
+
+function delBooking(memberId, bookingId, e) {
+  e.stopPropagation();
+  const m = members.find(x => x.id === memberId);
+  m.bookings = m.bookings.filter(b => b.id !== bookingId);
+  save(members);
+  render();
+}
+
+function resetMember(id) {
+  if (!confirm('Reset all hours for this member? Clears all bookings.')) return;
+  members.find(x => x.id === id).bookings = [];
+  save(members);
+  render();
+}
+
+function removeMember(id) {
+  if (!confirm('Remove this member entirely?')) return;
+  members = members.filter(x => x.id !== id);
+  save(members);
+  render();
+}
+
+function openModal() {
+  document.getElementById('f-start').value = new Date().toISOString().split('T')[0];
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-contact').value = '';
+  document.getElementById('modal').classList.add('open');
+  setTimeout(() => document.getElementById('f-name').focus(), 50);
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function confirmAdd() {
+  const name = document.getElementById('f-name').value.trim();
+  const contact = document.getElementById('f-contact').value.trim();
+  const tier = document.getElementById('f-tier').value;
+  const start = document.getElementById('f-start').value;
+  if (!name) { alert('Enter a company name.'); return; }
+  members.push({ id: Date.now(), name, contact, tier, start, bookings: [] });
+  save(members);
+  closeModal();
+  render();
+}
+
+// Close modal on overlay click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+setPeriod();
+render();
+</script>
+</body>
+</html>
